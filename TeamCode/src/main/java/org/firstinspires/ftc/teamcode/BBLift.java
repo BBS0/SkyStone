@@ -54,7 +54,7 @@ public class BBLift {
 
         Release();
 
-        _opMode.sleep(250);
+        _opMode.sleep(250);  
 
         //move down to starting pos on the encoders.
 
