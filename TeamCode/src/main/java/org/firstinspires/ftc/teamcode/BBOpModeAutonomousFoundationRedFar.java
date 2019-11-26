@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
 import java.util.List;
 
 @Autonomous(name="Auto-Foundation-Red", group="BB")
-public class BBOpModeAutonomousFoundationRed extends LinearOpMode
+public class BBOpModeAutonomousFoundationRedFar extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
     private BBSRobot robot = new BBSRobot();
@@ -37,35 +38,53 @@ public class BBOpModeAutonomousFoundationRed extends LinearOpMode
         runtime.reset();
 
         //hooks.UnLatched();
-        sleep(1000);
+        //sleep(1000);
         //work out how far forward we need to move
         //robot.moveForward(150, 0.55);
-        sleep(1000);
+        //sleep(1000);
 
         //put down the hooks into the foundation
-        hooks.Latched();
-        sleep(2000);
-
-        //work out how far backwards we need to move
-        //robot.twoPowerBackwards(135, 0.8, 0.4);
-        robot.moveBackwards(130, 0.60);
-        sleep(500);
+        //hooks.Latched();
 
         hooks.UnLatched();
-        sleep(2000);
 
+        robot.RobotMoveX(new Waypoint(20, 0, 0 ), 0.3);
+        robot.Stop();
+        sleep(100);
 
-        //we need to move out onto the line.
-        robot.turnLeft(95, 0.70);
+        robot.RobotMoveY(new Waypoint(0, 70, 0 ), 0.3);
+        robot.Stop();
+        sleep(100);
+
+        hooks.Latched();
         sleep(1000);
-        //robot.moveForward(170, 0.60);
-        //robot.strafe(0.7);
 
-        sleep(2000);
-        //robot.moveForward(0, 0);
+        robot.RobotMoveY(new Waypoint(0, -65, 0 ), 0.3);
+        robot.Stop();
+        sleep(100);
 
+        hooks.UnLatched();
+        sleep(1000);
 
+        robot.RobotMoveX(new Waypoint(-70, 0, 0), 0.3);
+        robot.Stop();
+        sleep(100);
 
+        robot.RobotMoveY(new Waypoint(0, 80, 0), 0.3);
+        robot.Stop();
+        sleep(100);
+
+        robot.RobotMoveX(new Waypoint(65, 0, 0), 0.3);
+        robot.Stop();
+        sleep(100);
+
+        robot.RobotMoveY(new Waypoint(0, -50, 0), 0.3);
+        robot.Stop();
+        sleep(100);
+
+        robot.RobotMoveX(new Waypoint(-115 , 0, 0), 0.3);
+        robot.Stop();
+        sleep(100);
     }
 
 
