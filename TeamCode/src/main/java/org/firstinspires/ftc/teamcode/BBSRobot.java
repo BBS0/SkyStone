@@ -58,9 +58,14 @@ public class BBSRobot {
     BNO055IMU imu;
 
 
+    PIDController           pidRotate, pidDrive;
+
+
+
 
     public void init(HardwareMap hwmap, Telemetry tele, LinearOpMode mode)
     {
+
 
         telemetry = tele;
         _intakeMotor.init(hwmap);
@@ -69,6 +74,8 @@ public class BBSRobot {
         _mode = mode;
 
 
+        pidDrive = new PIDController(.05, 0, 0);
+        pidRotate = new PIDController(.01, .00006, 0);
 
         leftFront = hwmap.get(DcMotor.class, "left_front");
         rightFront = hwmap.get(DcMotor.class, "right_front");
@@ -99,10 +106,11 @@ public class BBSRobot {
         // provide positional information.
         imu = hwmap.get(BNO055IMUImpl.class, "imu");
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         imu.initialize(parameters);
         // remap axis
-        BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
+        //BNO055IMUUtil.remapAxes(imu, AxesOrder.XYZ, AxesSigns.NPN);
         headingOffset = imu.getAngularOrientation().firstAngle;
 
 
@@ -193,18 +201,18 @@ public class BBSRobot {
             _lift.Off();
         }
 
-        if(gp1.y){
+        if(gp1.y || gp2.y){
             _lift.GoToHome();
         }
-        if(gp1.x){
+        if(gp1.x || gp2.x){
             _lift.LoadBrick();
         }
 
-        if(gp1.a){
+        if(gp1.a || gp2.a){
             _lift.Grip();
         }
 
-        if(gp1.b){
+        if(gp1.b || gp2.b){
             _lift.Release();
         }
 
@@ -305,9 +313,38 @@ public class BBSRobot {
         }
     }
 
+    public void RightPointTurn(double degrees, double speed){
+
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
+        LocalizerUpdate();
+
+        double driveScale = Math.sqrt(Math.pow(speed, 2) + Math.pow(0, 2));
+        driveScale = Range.clip(driveScale, 0, 1);
+
+        // Exponentiate our turn
+        double turn = Math.copySign(
+                Math.pow(MecanumUtil.deadZone(0, 0.05), 2),
+                0) * 0;
+
+
+            // Exponentiate our turn
+
+        MecanumPowers powers = MecanumUtil.powersFromAngle(0, 0, turn);
+        setPowers(powers);
+
+        _mode.sleep(250); //TODO: Test for now
+
+
+    }
+
     public void RobotMoveX(Waypoint target, double movementSpeed) {
 
-         //TODO: Think about this
+
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -335,6 +372,16 @@ public class BBSRobot {
                     direction) * slowScale;
 
             MecanumPowers powers = MecanumUtil.powersFromAngle(0, 0, turn);
+
+            if(target.x  < 0) {
+                powers.backRight -= 0.03;
+                powers.backLeft += 0.03;
+            }
+            else{
+
+                powers.backRight += 0.03;
+                powers.backLeft -= 0.03;
+            }
             setPowers(powers);
             telemetry.addLine("Robot X");
             telemetry.addData("X:", String.format("%.1f", localizer.x()));
@@ -379,13 +426,171 @@ public class BBSRobot {
 
     public void turnLeft(double degrees, double speed){
 
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
+
+        runtime.reset();
+
+        resetAngle();
+
+        telemetry.addData("Angle:", getAngle());
+        telemetry.update();
+
+        pidRotate.reset();
+        pidRotate.setSetpoint(degrees);
+        pidRotate.setInputRange(0, degrees);
+        pidRotate.setOutputRange(0, speed);
+        pidRotate.setTolerance(1);
+        pidRotate.enable();
+
+        left(speed);
+        _mode.sleep(100);
+        do {
+
+            double power = pidRotate.performPID(Math.abs(getAngle()));
+
+            if(power > 0){
+                left(Math.abs(power));
+            }else{
+                right(Math.abs(power));
+            }
+
+            LocalizerUpdate();
+
+            telemetry.addLine("Robot X");
+            telemetry.addData("Power", String.format("%.1f", power));
+            telemetry.addData("Angle:", Math.abs(getAngle()));
+            telemetry.update();
+
+        } while(runtime.seconds() < 5 && _mode.opModeIsActive() && !pidRotate.onTarget());
+
 
     }
 
-    public void turnRight(double degrees, double speed){
+    private void right(double speed){
+        double slowScale = speed;
+
+        double leftX = MecanumUtil.deadZone(1, 0.05) * slowScale;
+        double leftY = MecanumUtil.deadZone(0, 0.05) * slowScale;
+        double angle = Math.atan2(leftY, leftX) + Math.PI / 2;
+
+        double driveScale = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+        driveScale = Range.clip(driveScale, 0, 1);
+
+        // Exponentiate our turn
+        double turn = Math.copySign(
+                Math.pow(MecanumUtil.deadZone(1, 0.05), 2),
+                1) * slowScale;
 
 
+        MecanumPowers powers = MecanumUtil.powersFromAngle(angle, driveScale, 0);
+        setPowers(powers);
+    }
 
+    private void left(double speed)
+    {
+        double slowScale = speed;
+
+        double leftX = MecanumUtil.deadZone(-1, 0.05) * slowScale;
+        double leftY = MecanumUtil.deadZone(0, 0.05) * slowScale;
+        double angle = Math.atan2(leftY, leftX) + Math.PI / 2;
+
+        double driveScale = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+        driveScale = Range.clip(driveScale, 0, 1);
+
+        // Exponentiate our turn
+        double turn = Math.copySign(
+                Math.pow(MecanumUtil.deadZone(-1, 0.05), 2),
+                1) * slowScale;
+
+
+        MecanumPowers powers = MecanumUtil.powersFromAngle(angle, driveScale, 0);
+        setPowers(powers);
+    }
+
+    public void turnRight(double degrees, double speed)
+    {
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        if (Math.abs(degrees) > 359) degrees = (int) Math.copySign(359, degrees);
+
+        runtime.reset();
+
+        resetAngle();
+
+        telemetry.addData("Angle:", getAngle());
+        telemetry.update();
+
+        pidRotate.reset();
+        pidRotate.setSetpoint(degrees);
+        pidRotate.setInputRange(0, degrees);
+        pidRotate.setOutputRange(0, speed);
+        pidRotate.setTolerance(1);
+        pidRotate.enable();
+
+        right(speed);
+        _mode.sleep(100);
+        do {
+
+            double power = pidRotate.performPID(Math.abs(getAngle()));
+
+            if(power > 0){
+                right(Math.abs(power));
+            }else{
+                left(Math.abs(power));
+            }
+
+            LocalizerUpdate();
+
+            telemetry.addLine("Robot X");
+            telemetry.addData("Power", String.format("%.1f", power));
+            telemetry.addData("Angle:", Math.abs(getAngle()));
+            telemetry.update();
+
+        } while(runtime.seconds() < 5 && _mode.opModeIsActive() && !pidRotate.onTarget());
+
+
+    }
+
+    Orientation             lastAngles = new Orientation();
+    double                  globalAngle;
+
+    private void resetAngle()
+    {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    private double getAngle()
+    {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalAngle;
     }
 
 

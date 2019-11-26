@@ -4,11 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.common.math.Pose;
 import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
-@Autonomous(name="Auto-SkyWall-Red-DP", group="BB")
-public class BBAutoRedSkystoneWallPark extends LinearOpMode
+@Autonomous(name="Auto-Foundation-Blue-Point-Wall", group="BB")
+public class BBAutoBlueFoundationWallPointTurn extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
     private BBSRobot robot = new BBSRobot();
@@ -26,7 +25,6 @@ public class BBAutoRedSkystoneWallPark extends LinearOpMode
         hooks.init(hardwareMap);
 
 
-
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Starting Auto");
         telemetry.update();
@@ -34,18 +32,18 @@ public class BBAutoRedSkystoneWallPark extends LinearOpMode
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
         runtime.reset();
+        robot.LocalizerUpdate();
 
-        robot.turnLeft(90, 0.3);
+        Waypoint way1 = new Waypoint(0, 55.0, 0);
+         //while(this.opModeIsActive()){
+        robot.RobotMoveY(way1, 0.3);
         robot.Stop();
+        Waypoint way2 = new Waypoint(20, 0, 0);
+        robot.RobotMoveX(way2, 0.3);
 
 
 
-        robot.init(hardwareMap, telemetry, this);
-
-        waitForStart();
-
-        //code below is our auto
-
-        
     }
+
+
 }
