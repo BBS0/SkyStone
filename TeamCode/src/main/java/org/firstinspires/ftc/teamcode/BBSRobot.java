@@ -145,21 +145,27 @@ public class BBSRobot {
         telemetry.addData("H:",String.format("%.1f", MathUtil.angleWrap(Math.toDegrees(localizer.h()))));
         telemetry.update();
 
+        //Slow the robot down if the left trigger is used.
         double slowScale = ((1 - gp1.left_trigger) * 0.7 + 0.3);
 
+        
         double leftX = MecanumUtil.deadZone(gp1.left_stick_x, 0.05) * slowScale;
         double leftY = MecanumUtil.deadZone(gp1.left_stick_y, 0.05) * slowScale;
+        
+        //work out the angle in which the joystick is held
         double angle = Math.atan2(leftY, leftX) + Math.PI / 2;
 
+        //work out the magnitude (or hypotenuse) of our stick position
         double driveScale = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+        //make sure its between zero and one
         driveScale = Range.clip(driveScale, 0, 1);
 
-        // Exponentiate our turn
+        // Exponentiate our turn - i.e. work out what our strafing should look like
         double turn = Math.copySign(
                 Math.pow(MecanumUtil.deadZone(gp1.right_stick_x, 0.05), 2),
                 gp1.right_stick_x) * slowScale;
 
-
+        //pass in the angle to move, the speed, then the strafing amount
         MecanumPowers powers = MecanumUtil.powersFromAngle(angle, driveScale, turn);
         setPowers(powers);
 
@@ -216,9 +222,7 @@ public class BBSRobot {
             _lift.Release();
         }
 
-       /* telemetry.addData("1:", leftRear.getCurrentPosition()); //side
-        telemetry.addData("2", rightRear.getCurrentPosition()); //forward
-        telemetry.update();*/
+       
 
     }
 
@@ -239,6 +243,7 @@ public class BBSRobot {
     public static Pose GUNNING_REDUCTION_DISTANCES = new Pose(6, 6, Math.PI/2);
     public static Pose FINE_REDUCTION_DISTANCES = new Pose(3, 3, Math.PI);
 
+     //test function that can use a waypoint in absoulte co-ordinates to move.
      public void RobotMove(Waypoint target, double movementSpeed) {
 
          telemetry.addData("X:", String.format("%.1f", localizer.x()));
@@ -289,9 +294,10 @@ public class BBSRobot {
          telemetry.update();
     }
 
+    //move the robot in the Y plane
     public void RobotMoveY(Waypoint target, double movementSpeed) {
 
-        //TODO: Think about this -- we loose position on the field
+        //reset the encoders
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -300,6 +306,7 @@ public class BBSRobot {
         double angle = 0;
 
         if(target.y < 0){
+            
             double y = MecanumUtil.deadZone(1.0, 0.05) * 0.3;
             angle = Math.atan2(y, 0) + Math.PI / 2;
         }
@@ -317,16 +324,13 @@ public class BBSRobot {
 
     public void RobotMoveX(Waypoint target, double movementSpeed) {
 
-
+        //reset the encoders
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-       // telemetry.addData("X:", String.format("%.1f", localizer.x()));
-       // telemetry.addData("Y:",String.format("%.1f", localizer.y()));
-       // telemetry.addData("H:",String.format("%.1f", Math.toDegrees(localizer.h())));
-       // telemetry.update();
+      
         LocalizerUpdate();
         while(_mode.opModeIsActive() && Math.abs(localizer.x()) < Math.abs(target.x)) {
             LocalizerUpdate();
@@ -339,13 +343,15 @@ public class BBSRobot {
                 direction = -1;
             }
 
-            // Exponentiate our turn
+            // strafing speed
             double turn = Math.copySign(
                     Math.pow(MecanumUtil.deadZone(direction, 0.05), 2),
                     direction) * slowScale;
 
             MecanumPowers powers = MecanumUtil.powersFromAngle(0, 0, turn);
 
+            //our robot needs a boost on the back wheels
+            //a little bit of friction is present.
             if(target.x  < 0) {
                 powers.backRight -= 0.03;
                 powers.backLeft += 0.03;
@@ -356,11 +362,8 @@ public class BBSRobot {
                 powers.backLeft -= 0.03;
             }
             setPowers(powers);
-            telemetry.addLine("Robot X");
-            telemetry.addData("X:", String.format("%.1f", localizer.x()));
-            telemetry.addData("Y:",String.format("%.1f", localizer.y()));
-            telemetry.addData("H:",String.format("%.1f", MathUtil.angleWrap(Math.toDegrees(localizer.h()))));
-            telemetry.update();
+            
+          
         }
     }
 
@@ -396,7 +399,8 @@ public class BBSRobot {
         setPowers(powers);
     }
 
-
+    //use the gyro to do a left point turn
+    //uses a PID to slow it down as it approaches the angle
     public void turnLeft(double degrees, double speed){
 
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -434,27 +438,28 @@ public class BBSRobot {
 
             LocalizerUpdate();
 
-            telemetry.addLine("Robot X");
-            telemetry.addData("Power", String.format("%.1f", power));
-            telemetry.addData("Angle:", Math.abs(getAngle()));
-            telemetry.update();
+         
 
         } while(runtime.seconds() < 5 && _mode.opModeIsActive() && !pidRotate.onTarget());
 
 
     }
 
+    //use the gyro to do a right point turn
+    //uses a PID to slow it down as it approaches the angle
     private void right(double speed){
         double slowScale = speed;
 
-        double leftX = MecanumUtil.deadZone(1, 0.05) * slowScale;
-        double leftY = MecanumUtil.deadZone(0, 0.05) * slowScale;
+        double leftX = MecanumUtil.deadZone(1, 0.05) * slowScale; // make the magnitude position less (with the speed)
+        double leftY = 0; //nothing on the Y for a turn
         double angle = Math.atan2(leftY, leftX) + Math.PI / 2;
 
+        //calculate the magnitude
         double driveScale = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
+        //ensure its between zero to one
         driveScale = Range.clip(driveScale, 0, 1);
 
-        // Exponentiate our turn
+        // Exponentiate our turn - return a positive number
         double turn = Math.copySign(
                 Math.pow(MecanumUtil.deadZone(1, 0.05), 2),
                 1) * slowScale;
@@ -469,7 +474,7 @@ public class BBSRobot {
         double slowScale = speed;
 
         double leftX = MecanumUtil.deadZone(-1, 0.05) * slowScale;
-        double leftY = MecanumUtil.deadZone(0, 0.05) * slowScale;
+        double leftY = 0;
         double angle = Math.atan2(leftY, leftX) + Math.PI / 2;
 
         double driveScale = Math.sqrt(Math.pow(leftX, 2) + Math.pow(leftY, 2));
@@ -522,16 +527,14 @@ public class BBSRobot {
 
             LocalizerUpdate();
 
-            telemetry.addLine("Robot X");
-            telemetry.addData("Power", String.format("%.1f", power));
-            telemetry.addData("Angle:", Math.abs(getAngle()));
-            telemetry.update();
+           
 
         } while(runtime.seconds() < 5 && _mode.opModeIsActive() && !pidRotate.onTarget());
 
 
     }
-
+    
+    //store values for the location - used for gyro turning
     Orientation             lastAngles = new Orientation();
     double                  globalAngle;
 
