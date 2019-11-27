@@ -314,10 +314,24 @@ public class BBSRobot {
             angle = Math.atan2(y, 0) + Math.PI / 2;
         }
 
+        resetAngle();
+        pidDrive.setSetpoint(0);
+        pidDrive.setOutputRange(0, movementSpeed);
+        pidDrive.setInputRange(-90, 90);
+        pidDrive.enable();
+
         LocalizerUpdate();
         while(_mode.opModeIsActive() &&  Math.abs(localizer.y()) < Math.abs(target.y)) {
+            double correction = pidDrive.performPID(getAngle());
             LocalizerUpdate();
-            MecanumPowers powers = MecanumUtil.powersFromAngle(angle, movementSpeed, 0);
+            MecanumPowers powers = MecanumUtil.powersFromAngle(angle - correction, movementSpeed, 0);
+
+            //use a pid
+            telemetry.addLine("PID");
+            telemetry.addData("Correction", correction);
+            telemetry.addData("Angle", getAngle());
+            telemetry.update();
+
             setPowers(powers);
 
         }

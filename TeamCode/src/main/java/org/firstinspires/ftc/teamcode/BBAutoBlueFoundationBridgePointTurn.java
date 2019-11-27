@@ -19,7 +19,9 @@ public class BBAutoBlueFoundationBridgePointTurn extends LinearOpMode
 
         robot.init(hardwareMap, telemetry, this);
         hooks.init(hardwareMap);
-        hooks.UnLatched();
+
+        waitForStart();
+        /*hooks.UnLatched();
 
         robot.RobotMoveY(new Waypoint(0, 72, 0 ), 0.3);
         robot.Stop();
@@ -29,7 +31,8 @@ public class BBAutoBlueFoundationBridgePointTurn extends LinearOpMode
 
         hooks.UnLatched();
         sleep( 1000);
-        robot.turnRight(90, 0.3);
+        robot.turnRight(90, 0.3);*/
+        robot.RobotMoveY(new Waypoint(0, 100, 0.3 ), 0.3);
         robot.Stop();
     }
 

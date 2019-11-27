@@ -72,7 +72,7 @@ public class BBLift {
         _rightLift.setPower(0.5);
 
 
-        while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
+        /*while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
         {
             _telementary.addData("L-encoder-fwd", _leftLift.getCurrentPosition() + "  busy=" + _leftLift.isBusy());
             _telementary.addData("R-encoder-fwd", _rightLift.getCurrentPosition() + "  busy=" + _rightLift.isBusy());
@@ -83,10 +83,10 @@ public class BBLift {
 
         _leftLift.setPower(0);
         _rightLift.setPower(0);
-
+        */
 
         //then grab the brick
-
+        _opMode.sleep(500);
         Grip();
         _opMode.sleep(500);
 
@@ -111,7 +111,7 @@ public class BBLift {
         _rightLift.setPower(0.5);
 
 
-        while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
+       /* while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
         {
             _telementary.addData("L-encoder-fwd", _leftLift.getCurrentPosition() + "  busy=" + _leftLift.isBusy());
             _telementary.addData("R-encoder-fwd", _rightLift.getCurrentPosition() + "  busy=" + _rightLift.isBusy());
@@ -123,7 +123,7 @@ public class BBLift {
        // _leftLift.setZeroPowerBehavior( DcMotor.ZeroPowerBehavior.BRAKE );
        // _rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftLift.setPower(0);
-        _rightLift.setPower(0);
+        _rightLift.setPower(0);*/
 
 
     }
