@@ -29,7 +29,7 @@ public class BBAutoBlueFoundationBridgePointTurn extends LinearOpMode
 
         hooks.UnLatched();
         sleep( 1000);
-        robot.RightPointTurn(90, 0.2);
+        robot.turnRight(90, 0.3);
         robot.Stop();
     }
 
