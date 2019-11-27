@@ -41,12 +41,12 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
 
         runtime.reset();
 
-        robot.RobotMoveX(new Waypoint(45,0,0),0.2);
+        robot.RobotMoveX(new Waypoint(60,0,0),0.2);
         robot.Stop();
 
         Recognition foundTarget = null;
 
-        while(runtime.seconds() < 15 && this.opModeIsActive() && foundStone == false && movesForward < 15) {
+        while(runtime.seconds() < 15 && this.opModeIsActive() && foundStone == false && movesForward < 5) {
             if (targets != null && targets.size() > 0) {
                 // found something
                 for (int count = 0; count < targets.size(); count++) {
@@ -152,16 +152,22 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             telemetry.addLine("No stone has been found - parking now");
             // TODO: look at the localiser and work out how far back we need to go to park
 
-            robot.RobotMoveX(new Waypoint(10,0,0), 0.2);
+            //robot.RobotMoveY(new Waypoint(0,-8,0), 0.2);
+            robot.RobotMoveX(new Waypoint(30,0,0), 0.2);
             robot.Stop();
-
+            TimeElapsedPause(500);
             robot.SkyHookOn();
-            robot.RobotMoveX(new Waypoint(-10,0,0),0.2);
-            robot.RobotMoveY(new Waypoint(0,-200,0),0.2);
+            //TimeElapsedPause(700);
+            sleep(2000);
+            robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
+            TimeElapsedPause(1000);
+            robot.RobotMoveY(new Waypoint(0,-120, 0),0.4);
             robot.Stop();
+            TimeElapsedPause(300);
 
             robot.SkyHookOff();
-            robot.RobotMoveY(new Waypoint(0,10,0), 0.2);
+            TimeElapsedPause(100);
+            robot.RobotMoveY(new Waypoint(0,40,0), 0.2);
             robot.Stop();
         }
 

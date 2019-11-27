@@ -18,18 +18,50 @@ public class BBAutoRedFoundationWallPointTurn extends LinearOpMode
 
         robot.init(hardwareMap, telemetry, this);
         hooks.init(hardwareMap);
-        hooks.UnLatched();
-
-        robot.RobotMoveY(new Waypoint(0, 72, 0 ), 0.3);
-        robot.Stop();
-
-        robot.RobotMoveX(new Waypoint(20, 0, 0 ), 0.3);
-        robot.Stop();
 
         hooks.UnLatched();
+
+        robot.RobotMoveY(new Waypoint(0, 20, 0 ), 0.3);
+        robot.Stop();
+
+        robot.RobotMoveX(new Waypoint(45, 0, 0 ), 0.3);
+        robot.Stop();
+
+        robot.RobotMoveY(new Waypoint(0, 52, 0 ), 0.3);
+        robot.Stop();
+
+        hooks.Latched();
         sleep( 1000);
 
-        robot.turnRight(90, 0.3);
+        robot.RobotMoveY(new Waypoint(0, -20, 0 ), 0.5);
+        robot.Stop();
+
+        robot.turnRight(10, 0.5);
+        robot.Stop();
+
+        robot.RobotMoveY(new Waypoint(0, -20, 0 ), 0.5);
+        robot.Stop();
+
+        robot.turnRight(10, 0.5);
+        robot.Stop();
+
+        robot.RobotMoveY(new Waypoint(0, -20, 0 ), 0.5);
+        robot.Stop();
+
+        robot.turnRight(10, 0.5);
+        robot.Stop();
+
+        robot.RobotMoveY(new Waypoint(0, -20, 0 ), 0.5);
+        robot.Stop();
+
+        robot.turnRight(10, 0.5);
+        robot.Stop();
+
+        robot.RobotMoveY(new Waypoint(0, -20, 0 ), 0.5);
+        robot.Stop();
+
+        robot.turnRight(50, 0.5);
+
         robot.Stop();
 
     }
