@@ -19,6 +19,8 @@ public class BBAutoRedFoundationWallPark extends LinearOpMode
 
         waitForStart();
 
+        sleep(15000);
+
         robot.RobotMoveY(new Waypoint(0, 10, 0 ), 0.2);
         robot.Stop();
 
@@ -28,3 +30,4 @@ public class BBAutoRedFoundationWallPark extends LinearOpMode
 
 
 }
+

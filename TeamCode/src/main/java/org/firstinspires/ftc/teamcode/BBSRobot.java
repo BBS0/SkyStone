@@ -148,6 +148,9 @@ public class BBSRobot {
         //Slow the robot down if the left trigger is used.
         double slowScale = ((1 - gp1.left_trigger) * 0.7 + 0.3);
 
+        if(gp1.left_trigger == 0){
+            slowScale = 0.7;
+        }
         
         double leftX = MecanumUtil.deadZone(gp1.left_stick_x, 0.05) * slowScale;
         double leftY = MecanumUtil.deadZone(gp1.left_stick_y, 0.05) * slowScale;
@@ -197,10 +200,10 @@ public class BBSRobot {
 
         }
 
-        if(gp1.dpad_up || gp2.left_stick_x > 0) {
+        if(gp1.dpad_up || gp2.dpad_up) {
             _lift.DropOff();
         }
-        else if(gp1.dpad_down || gp2.left_stick_x < 0){
+        else if(gp1.dpad_down || gp2.dpad_down){
             _lift.Home();
         }
         else{
@@ -353,13 +356,13 @@ public class BBSRobot {
             //our robot needs a boost on the back wheels
             //a little bit of friction is present.
             if(target.x  < 0) {
-                powers.backRight -= 0.02;
-                powers.backLeft += 0.02;
+                powers.backRight -= 0.00;
+                powers.backLeft += 0.00;
             }
             else{
 
-                powers.backRight += 0.02;
-                powers.backLeft -= 0.02;
+                powers.backRight += 0.00;
+                powers.backLeft -= 0.00;
             }
             setPowers(powers);
             
