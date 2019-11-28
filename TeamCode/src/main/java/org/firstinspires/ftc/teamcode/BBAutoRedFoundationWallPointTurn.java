@@ -61,6 +61,7 @@ public class BBAutoRedFoundationWallPointTurn extends LinearOpMode
         robot.Stop();
 
         robot.turnRight(50, 0.5);
+
         robot.Stop();
 
     }
