@@ -34,6 +34,9 @@ public class BBAutoBlueFoundationBridgePointTurn extends LinearOpMode
         robot.turnRight(90, 0.3);*/
         robot.RobotMoveY(new Waypoint(0, 100, 0.3 ), 0.3);
         robot.Stop();
+
+        robot.RobotMoveX(new Waypoint(100, 0, 0.3 ), 0.4);
+        robot.Stop();
     }
 
 

@@ -146,10 +146,10 @@ public class BBSRobot {
         telemetry.update();
 
         //Slow the robot down if the left trigger is used.
-        double slowScale = ((1 - gp1.left_trigger) * 0.7 + 0.3);
+        double slowScale = ((1 - gp1.left_trigger) * 0.7 + 0.4);
 
         if(gp1.left_trigger == 0){
-            slowScale = 0.7;
+            slowScale = 0.8;
         }
         
         double leftX = MecanumUtil.deadZone(gp1.left_stick_x, 0.05) * slowScale;
@@ -347,6 +347,11 @@ public class BBSRobot {
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        pidDrive.setOutputRange(0, 0.05);
+        pidDrive.setInputRange(-90,90);
+        pidDrive.setSetpoint(0);
+        pidDrive.enable();
+        getAngle();
       
         LocalizerUpdate();
         while(_mode.opModeIsActive() && Math.abs(localizer.x()) < Math.abs(target.x)) {
@@ -367,16 +372,23 @@ public class BBSRobot {
 
             MecanumPowers powers = MecanumUtil.powersFromAngle(0, 0, turn);
 
+
+            double correction = pidDrive.performPID(getRightAngle());
+
+            telemetry.addData("Strafe correction", correction);
+            telemetry.addData("angle", getRightAngle());
+            telemetry.update();
+
             //our robot needs a boost on the back wheels
             //a little bit of friction is present.
             if(target.x  < 0) {
-                powers.backRight -= 0.00;
-                powers.backLeft += 0.00;
+                powers.backRight -= correction;
+                powers.backLeft += correction;
             }
             else{
 
-                powers.backRight += 0.00;
-                powers.backLeft -= 0.00;
+                powers.backRight += correction;
+                powers.backLeft -= correction;
             }
             setPowers(powers);
             
@@ -553,13 +565,34 @@ public class BBSRobot {
     
     //store values for the location - used for gyro turning
     Orientation             lastAngles = new Orientation();
-    double                  globalAngle;
+    Orientation             lastRightAngles = new Orientation();
+    double                  globalAngle, globalRightAngle;
 
     private void resetAngle()
     {
         lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
         globalAngle = 0;
+        globalRightAngle = 0;
+    }
+
+    private double getRightAngle()
+    {
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.thirdAngle - lastAngles.thirdAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalRightAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return globalRightAngle;
     }
 
     private double getAngle()
