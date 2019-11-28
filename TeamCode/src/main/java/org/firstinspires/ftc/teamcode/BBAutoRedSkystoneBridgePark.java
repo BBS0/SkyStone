@@ -37,12 +37,12 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
         int movesForward = 0;
         boolean foundStone = false;
 
-        List<Recognition> targets = _vision.visionFeedback(telemetry);
-
         runtime.reset();
 
-        robot.RobotMoveX(new Waypoint(60,0,0),0.2);
+        robot.RobotMoveX(new Waypoint(50,0,0),0.2);
         robot.Stop();
+
+        List<Recognition> targets = _vision.visionFeedback(telemetry);
 
         Recognition foundTarget = null;
 
@@ -50,10 +50,11 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             if (targets != null && targets.size() > 0) {
                 // found something
                 for (int count = 0; count < targets.size(); count++) {
-                    foundTarget = targets.get(count);
-                    telemetry.addLine(foundTarget.getLabel());
 
-                    if (foundTarget.getLabel() == "Skystone") {
+                    telemetry.addLine(targets.get(count).getLabel());
+
+                    if (targets.get(count).getLabel() == "Skystone") {
+                        foundTarget = targets.get(count);
                         telemetry.addLine("SKYSTONE FOUND");
                         telemetry.addData("Pos", foundTarget.getLeft());
                         telemetry.addData("Right", foundTarget.getRight());
@@ -141,10 +142,22 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             }
 
             // code for once the skystone has been found
-            robot.RobotMoveX(new Waypoint(35,0,0), 0.2);
+            robot.RobotMoveX(new Waypoint(40,0,0), 0.2);
             robot.Stop();
-
+            TimeElapsedPause(500);
             robot.SkyHookOn();
+            //TimeElapsedPause(700);
+            sleep(2000);
+            robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
+            TimeElapsedPause(1000);
+            robot.RobotMoveY(new Waypoint(0,-(movesForward * 10 + 80), 0),0.4);
+            robot.Stop();
+            TimeElapsedPause(300);
+
+            robot.SkyHookOff();
+            TimeElapsedPause(100);
+            robot.RobotMoveY(new Waypoint(0,40,0), 0.2);
+            robot.Stop();
         }
 
         else {
@@ -153,7 +166,7 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             // TODO: look at the localiser and work out how far back we need to go to park
 
             //robot.RobotMoveY(new Waypoint(0,-8,0), 0.2);
-            robot.RobotMoveX(new Waypoint(30,0,0), 0.2);
+            robot.RobotMoveX(new Waypoint(40,0,0), 0.2);
             robot.Stop();
             TimeElapsedPause(500);
             robot.SkyHookOn();

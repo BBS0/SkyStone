@@ -324,15 +324,30 @@ public class BBSRobot {
         while(_mode.opModeIsActive() &&  Math.abs(localizer.y()) < Math.abs(target.y)) {
             double correction = pidDrive.performPID(getAngle());
             LocalizerUpdate();
-            MecanumPowers powers = MecanumUtil.powersFromAngle(angle - correction, movementSpeed, 0);
 
+            if(target.y >= 0) {
+                MecanumPowers powers = MecanumUtil.powersFromAngle(angle - correction, movementSpeed, 0);
+                setPowers(powers);
+            }else{
+
+                MecanumPowers powers = MecanumUtil.powersFromAngle(angle, movementSpeed, 0);
+                //reverse needs to have the motors corrected in reverse.
+                powers.frontRight -= correction;
+                powers.backLeft -= correction;
+
+                powers.frontLeft += correction;
+                powers.backRight += correction;
+
+
+                setPowers(powers);
+            }
             //use a pid
             telemetry.addLine("PID");
             telemetry.addData("Correction", correction);
             telemetry.addData("Angle", getAngle());
             telemetry.update();
 
-            setPowers(powers);
+
 
         }
     }
