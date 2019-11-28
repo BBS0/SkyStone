@@ -387,8 +387,8 @@ public class BBSRobot {
             }
             else{
 
-                powers.backRight += correction;
-                powers.backLeft -= correction;
+                powers.backRight -= correction;
+                powers.backLeft += correction;
             }
             setPowers(powers);
             
