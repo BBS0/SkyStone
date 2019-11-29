@@ -20,12 +20,10 @@ public class BBAutoRedFoundationBridgePark extends LinearOpMode
 
         sleep(15000);
 
-        robot.RobotMoveY(new Waypoint(0, 65, 0 ), 0.2);
+        robot.RobotMoveY(new Waypoint(0, 60, 0 ), 0.2);
         robot.Stop();
 
         robot.RobotMoveX(new Waypoint(-97, 0, 0 ), 0.4);
         robot.Stop();
     }
-
-
 }
