@@ -20,13 +20,15 @@ public class BBLift {
     private int rightLiftStartPos;
 
     private Telemetry _telementary;
+    private BBSRobot _robot;
 
     private LinearOpMode _opMode;
 
-    public void init(HardwareMap hwmap, Telemetry tele,LinearOpMode opMode ){
+    public void init(HardwareMap hwmap, Telemetry tele,LinearOpMode opMode, BBSRobot robot ){
 
         _telementary = tele;
         _opMode = opMode;
+        _robot = robot;
 
         _leftLift = hwmap.get(DcMotor.class, "left_lift");
         _leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -52,6 +54,7 @@ public class BBLift {
 
     public void LoadBrick(){
 
+        _robot.Stop();
         Release();
 
         _opMode.sleep(250);  
@@ -72,7 +75,7 @@ public class BBLift {
         _rightLift.setPower(0.5);
 
 
-        /*while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
+        while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
         {
             _telementary.addData("L-encoder-fwd", _leftLift.getCurrentPosition() + "  busy=" + _leftLift.isBusy());
             _telementary.addData("R-encoder-fwd", _rightLift.getCurrentPosition() + "  busy=" + _rightLift.isBusy());
@@ -83,19 +86,21 @@ public class BBLift {
 
         _leftLift.setPower(0);
         _rightLift.setPower(0);
-        */
+
 
         //then grab the brick
         _opMode.sleep(500);
         Grip();
-        _opMode.sleep(500);
+      //  _opMode.sleep(500);
 
         //wait back in the home position
-        GoToHome();
+       // GoToHome();
 
     }
 
     public void GoToHome(){
+
+        _robot.Stop();
 
         _rightLift.setDirection(DcMotor.Direction.REVERSE);
         _leftLift.setDirection(DcMotor.Direction.FORWARD);
@@ -111,31 +116,42 @@ public class BBLift {
         _rightLift.setPower(0.5);
 
 
-       /* while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
+
+        while (_opMode.opModeIsActive() && _leftLift.isBusy() && _rightLift.isBusy())
         {
-            _telementary.addData("L-encoder-fwd", _leftLift.getCurrentPosition() + "  busy=" + _leftLift.isBusy());
+            /*_telementary.addData("L-encoder-fwd", _leftLift.getCurrentPosition() + "  busy=" + _leftLift.isBusy());
             _telementary.addData("R-encoder-fwd", _rightLift.getCurrentPosition() + "  busy=" + _rightLift.isBusy());
 
-            _telementary.update();
+            _telementary.update();*/
             _opMode.idle();
         }
 
        // _leftLift.setZeroPowerBehavior( DcMotor.ZeroPowerBehavior.BRAKE );
        // _rightLift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         _leftLift.setPower(0);
-        _rightLift.setPower(0);*/
+        _rightLift.setPower(0);
 
 
     }
 
     public void Home(){
 
-        _rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        _rightLift.setDirection(DcMotor.Direction.REVERSE);
-        _leftLift.setDirection(DcMotor.Direction.FORWARD);
-        _leftLift.setPower(0.5);
-        _leftLift.setPower(0.5);
+
+        _leftLift.setTargetPosition(leftLiftStartPos + 250);
+        _rightLift.setTargetPosition(rightLiftStartPos - 250);
+
+
+        if(_rightLift.getCurrentPosition() > 0 || _leftLift.getCurrentPosition() < 0 ) {
+            _rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            _leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            _rightLift.setDirection(DcMotor.Direction.REVERSE);
+            _leftLift.setDirection(DcMotor.Direction.FORWARD);
+            _leftLift.setPower(0.5);
+            _leftLift.setPower(0.5);
+        }else{
+            _leftLift.setPower(0);
+            _rightLift.setPower(0);
+        }
 
     }
 

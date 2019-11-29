@@ -120,9 +120,9 @@ public class BBAutoBlueSkystoneBridgePark extends LinearOpMode {
                 telemetry.update();
 
                 if (foundAngle > 0) {
-                    robot.RobotMoveY(new Waypoint(0, 2, 0), 0.18);
-                } else {
                     robot.RobotMoveY(new Waypoint(0, -2, 0), 0.18);
+                } else {
+                    robot.RobotMoveY(new Waypoint(0, 2, 0), 0.18);
                 }
 
                 robot.Stop();
@@ -143,7 +143,7 @@ public class BBAutoBlueSkystoneBridgePark extends LinearOpMode {
             }
 
             // code for once the skystone has been found
-            robot.RobotMoveX(new Waypoint(40,0,0), 0.2);
+            robot.RobotMoveX(new Waypoint(30,0,0), 0.2);
             robot.Stop();
             TimeElapsedPause(500);
             robot.SkyHookOn();
@@ -151,7 +151,7 @@ public class BBAutoBlueSkystoneBridgePark extends LinearOpMode {
             sleep(2000);
             robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
             TimeElapsedPause(1000);
-            robot.RobotMoveY(new Waypoint(0,(movesForward * 10 + 80), 0), 0.4);
+            robot.RobotMoveY(new Waypoint(0,(movesForward * 10 + 90), 0), 0.4);
             robot.Stop();
             TimeElapsedPause(300);
 
