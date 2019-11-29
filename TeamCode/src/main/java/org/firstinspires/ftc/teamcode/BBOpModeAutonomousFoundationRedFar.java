@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
 import java.util.List;
 
-@Autonomous(name="Auto-Foundation-Red", group="BB")
+@Autonomous(name="Auto-Foundation-Red-Far", group="BB")
 public class BBOpModeAutonomousFoundationRedFar extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();

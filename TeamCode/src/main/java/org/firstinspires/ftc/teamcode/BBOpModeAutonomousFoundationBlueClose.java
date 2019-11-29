@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
 import java.util.List;
 
-@Autonomous(name="Auto-Foundation-Red-Close", group="BB")
-public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
+@Autonomous(name="Auto-Foundation-Blue-Close", group="BB")
+public class BBOpModeAutonomousFoundationBlueClose extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
     private BBSRobot robot = new BBSRobot();
@@ -30,7 +30,7 @@ public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
 
         hooks.UnLatched();
 
-        robot.RobotMoveX(new Waypoint(20, 0, 0 ), 0.3);
+        robot.RobotMoveX(new Waypoint(-20, 0, 0 ), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -48,7 +48,7 @@ public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
         hooks.UnLatched();
         sleep(1000);
 
-        robot.RobotMoveX(new Waypoint(-70, 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(70, 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -56,7 +56,7 @@ public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveX(new Waypoint(75, 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(-75, 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -64,7 +64,7 @@ public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveX(new Waypoint(-80 , 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(80 , 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -72,8 +72,9 @@ public class BBOpModeAutonomousFoundationRedClose extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveX(new Waypoint(-45 , 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(45 , 0, 0), 0.3);
         robot.Stop();
         sleep(100);
     }
 }
+
