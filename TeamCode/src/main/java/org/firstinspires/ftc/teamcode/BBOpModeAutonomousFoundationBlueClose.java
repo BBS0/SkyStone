@@ -68,7 +68,7 @@ public class BBOpModeAutonomousFoundationBlueClose extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveY(new Waypoint(0 , -45, 0), 0.3);
+        robot.RobotMoveY(new Waypoint(0 , -25, 0), 0.3);
         robot.Stop();
         sleep(100);
 

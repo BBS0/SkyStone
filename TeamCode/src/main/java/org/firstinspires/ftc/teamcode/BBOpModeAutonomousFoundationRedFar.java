@@ -82,6 +82,10 @@ public class BBOpModeAutonomousFoundationRedFar extends LinearOpMode
         robot.Stop();
         sleep(100);
 
+        robot.RobotMoveY(new Waypoint(0, 10, 0), 0.4);
+        robot.Stop();
+        sleep(100);
+
         robot.RobotMoveX(new Waypoint(-125 , 0, 0), 0.3);
         robot.Stop();
         sleep(100);
