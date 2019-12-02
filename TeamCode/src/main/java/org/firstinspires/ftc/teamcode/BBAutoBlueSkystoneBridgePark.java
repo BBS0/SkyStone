@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 import java.util.List;
 
 
-@Autonomous(name="Auto-SkyBridge-Blue", group="BB")
+@Autonomous(name="Autonomous - Skystone Blue", group="BB")
 public class BBAutoBlueSkystoneBridgePark extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -149,7 +149,7 @@ public class BBAutoBlueSkystoneBridgePark extends LinearOpMode {
             robot.SkyHookOn();
             //TimeElapsedPause(700);
             sleep(2000);
-            robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
+            robot.RobotMoveX(new Waypoint(-2,0,0),0.2);
             TimeElapsedPause(1000);
             robot.RobotMoveY(new Waypoint(0,(movesForward * 10 + 90), 0), 0.4);
             robot.Stop();
