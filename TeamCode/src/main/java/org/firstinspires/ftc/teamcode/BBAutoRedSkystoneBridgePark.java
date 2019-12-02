@@ -119,9 +119,9 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
                 telemetry.update();
 
                 if (foundAngle > 0) {
-                    robot.RobotMoveY(new Waypoint(0, -2, 0), 0.18);
+                    robot.RobotMoveY(new Waypoint(0, -1, 0), 0.18);
                 } else {
-                    robot.RobotMoveY(new Waypoint(0, 2, 0), 0.18);
+                    robot.RobotMoveY(new Waypoint(0, 1, 0), 0.18);
                 }
 
                 robot.Stop();

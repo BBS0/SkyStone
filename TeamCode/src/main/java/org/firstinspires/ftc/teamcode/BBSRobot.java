@@ -151,7 +151,7 @@ public class BBSRobot {
         double slowScale = ((1 - gp1.left_trigger) * 0.7 + 0.4);
 
         if(gp1.left_trigger == 0){
-            slowScale = 0.8;
+            slowScale = 0.7;
         }
         
         double leftX = MecanumUtil.deadZone(gp1.left_stick_x, 0.05) * slowScale;
