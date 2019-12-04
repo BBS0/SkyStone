@@ -141,17 +141,13 @@ public class BBLift {
         _rightLift.setTargetPosition(rightLiftStartPos - 250);
 
 
-        if(_rightLift.getCurrentPosition() > 0 || _leftLift.getCurrentPosition() < 0 ) {
-            _rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            _leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            _rightLift.setDirection(DcMotor.Direction.REVERSE);
-            _leftLift.setDirection(DcMotor.Direction.FORWARD);
-            _leftLift.setPower(0.5);
-            _leftLift.setPower(0.5);
-        }else{
-            _leftLift.setPower(0);
-            _rightLift.setPower(0);
-        }
+         _rightLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         _leftLift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+         _rightLift.setDirection(DcMotor.Direction.REVERSE);
+         _leftLift.setDirection(DcMotor.Direction.FORWARD);
+         _leftLift.setPower(0.5);
+         _leftLift.setPower(0.5);
+
 
     }
 

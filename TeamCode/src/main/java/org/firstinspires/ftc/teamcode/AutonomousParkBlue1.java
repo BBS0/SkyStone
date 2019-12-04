@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
-@Autonomous(name="Auto-Foundation-Blue-Park-Wall", group="BB")
-public class BBAutoBlueFoundationWallPark extends LinearOpMode
+@Autonomous(name="Autonomous - Park Blue 1", group="BB")
+public class AutonomousParkBlue1 extends LinearOpMode
 {
     private BBSRobot robot = new BBSRobot();
 

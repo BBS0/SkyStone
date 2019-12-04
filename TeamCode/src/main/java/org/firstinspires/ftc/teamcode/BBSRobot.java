@@ -344,15 +344,9 @@ public class BBSRobot {
 
             //our robot needs a boost on the back wheels
             //a little bit of friction is present.
-            //if(target.x  < 0) {
                 powers.backRight += correction;
                 powers.backLeft -= correction;
-            //}
-           /* else{
 
-                powers.backRight += correction;
-                powers.backLeft -= correction;
-            }*/
             setPowers(powers);
              
           

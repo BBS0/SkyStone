@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
-@Autonomous(name="Auto-Foundation-Red-Park-Wall", group="BB")
-public class BBAutoRedFoundationWallPark extends LinearOpMode
+@Autonomous(name="Autonomous - Park Red 2", group="BB")
+public class AutonomousParkRed2 extends LinearOpMode
 {
     private BBSRobot robot = new BBSRobot();
 
@@ -20,8 +20,7 @@ public class BBAutoRedFoundationWallPark extends LinearOpMode
 
         sleep(15000);
 
-        robot.RobotMoveY(new Waypoint(0, 5
-                , 0 ), 0.2);
+        robot.RobotMoveY(new Waypoint(0, 60, 0 ), 0.2);
         robot.Stop();
 
         robot.RobotMoveX(new Waypoint(-97, 0, 0 ), 0.4);

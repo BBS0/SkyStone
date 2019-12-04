@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
 import java.util.List;
 
-@Autonomous(name="Auto-Foundation-Blue-Far", group="BB")
-public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
+@Autonomous(name="Autonomous - Foundation Red 1", group="BB")
+public class AutonomousFoundationRed1 extends LinearOpMode
 {
     private ElapsedTime runtime = new ElapsedTime();
     private BBSRobot robot = new BBSRobot();
@@ -18,6 +18,7 @@ public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
 
     @Override
     public void runOpMode() {
+
         robot.init(hardwareMap, telemetry, this);
         hooks.init(hardwareMap);
 
@@ -29,7 +30,7 @@ public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
 
         hooks.UnLatched();
 
-        robot.RobotMoveX(new Waypoint(-20, 0, 0 ), 0.3);
+        robot.RobotMoveX(new Waypoint(20, 0, 0 ), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -47,7 +48,7 @@ public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
         hooks.UnLatched();
         sleep(1000);
 
-        robot.RobotMoveX(new Waypoint(70, 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(-70, 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -55,7 +56,7 @@ public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveX(new Waypoint(-75, 0, 0), 0.3);
+        robot.RobotMoveX(new Waypoint(75, 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
@@ -63,11 +64,15 @@ public class BBOpModeAutonomousFoundationBlueFar extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveY(new Waypoint(0, 10, 0), 0.4);
+        robot.RobotMoveX(new Waypoint(-80 , 0, 0), 0.3);
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveX(new Waypoint(125 , 0, 0), 0.3);
+        robot.RobotMoveY(new Waypoint(0 , -25, 0), 0.3);
+        robot.Stop();
+        sleep(100);
+
+        robot.RobotMoveX(new Waypoint(-45 , 0, 0), 0.3);
         robot.Stop();
         sleep(100);
     }
