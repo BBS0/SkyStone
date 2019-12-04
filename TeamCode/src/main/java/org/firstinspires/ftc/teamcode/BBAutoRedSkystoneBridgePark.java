@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.navigation.Waypoint;
 
 import java.util.List;
 
-@Autonomous(name="Auto-SkyBridge-Red", group="BB")
+@Autonomous(name="Autonomous - Skystone Red", group="BB")
 public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
@@ -39,7 +39,7 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
 
         runtime.reset();
 
-        robot.RobotMoveX(new Waypoint(50,0,0),0.2);
+        robot.RobotMoveX(new Waypoint(47,0,0),0.2);
         robot.Stop();
 
         List<Recognition> targets = _vision.visionFeedback(telemetry);
@@ -118,7 +118,7 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
                 telemetry.addData("Angle", foundAngle);
                 telemetry.update();
 
-                if (foundAngle > 0) {
+                if (foundAngle > -0.5) {
                     robot.RobotMoveY(new Waypoint(0, -1, 0), 0.18);
                 } else {
                     robot.RobotMoveY(new Waypoint(0, 1, 0), 0.18);
@@ -142,13 +142,13 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             }
 
             // code for once the skystone has been found
-            robot.RobotMoveX(new Waypoint(30,0,0), 0.2);
+            robot.RobotMoveX(new Waypoint(25,0,0), 0.2);
             robot.Stop();
             TimeElapsedPause(500);
             robot.SkyHookOn();
             //TimeElapsedPause(700);
             sleep(2000);
-            robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
+            robot.RobotMoveX(new Waypoint(-3,0,0),0.2);
             TimeElapsedPause(1000);
             robot.RobotMoveY(new Waypoint(0,-(movesForward * 10 + 90), 0),0.4);
             robot.Stop();
@@ -156,7 +156,7 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
 
             robot.SkyHookOff();
             TimeElapsedPause(100);
-            robot.RobotMoveY(new Waypoint(0,40,0), 0.2);
+            robot.RobotMoveY(new Waypoint(0,50,0), 0.2);
             robot.Stop();
         }
 
@@ -166,13 +166,13 @@ public class BBAutoRedSkystoneBridgePark extends LinearOpMode {
             // TODO: look at the localiser and work out how far back we need to go to park
 
             //robot.RobotMoveY(new Waypoint(0,-8,0), 0.2);
-            robot.RobotMoveX(new Waypoint(40,0,0), 0.2);
+            robot.RobotMoveX(new Waypoint(30,0,0), 0.2);
             robot.Stop();
             TimeElapsedPause(500);
             robot.SkyHookOn();
             //TimeElapsedPause(700);
             sleep(2000);
-            robot.RobotMoveX(new Waypoint(-5,0,0),0.2);
+            robot.RobotMoveX(new Waypoint(-7,0,0),0.2);
             TimeElapsedPause(1000);
             robot.RobotMoveY(new Waypoint(0,-120, 0),0.4);
             robot.Stop();
