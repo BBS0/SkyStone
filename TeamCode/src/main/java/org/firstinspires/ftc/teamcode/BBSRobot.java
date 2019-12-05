@@ -228,8 +228,12 @@ public class BBSRobot {
         }
 
 
-        if(gp1.right_stick_button){
+        if(gp1.right_stick_button || gp2.right_stick_button){
             SkyHookOff();
+        }
+
+        if(gp2.left_stick_button){
+            SkyHookOn();
         }
 
     }
