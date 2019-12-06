@@ -60,7 +60,7 @@ public class AutonomousFoundationRed1 extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveY(new Waypoint(0, -70, 0), 0.4);
+        robot.RobotMoveY(new Waypoint(0, -60, 0), 0.4);
         robot.Stop();
         sleep(100);
 

@@ -59,11 +59,11 @@ public class AutonomousFoundationBlue2 extends LinearOpMode
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveY(new Waypoint(0, -65, 0), 0.4);
+        robot.RobotMoveY(new Waypoint(0, -60, 0), 0.4);
         robot.Stop();
         sleep(100);
 
-        robot.RobotMoveY(new Waypoint(0, 10, 0), 0.4);
+        robot.RobotMoveY(new Waypoint(0, 5, 0), 0.3);
         robot.Stop();
         sleep(100);
 
